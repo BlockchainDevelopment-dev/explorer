@@ -12,33 +12,35 @@ class ContractsTable extends Component {
   getTableColumns() {
     return [
       {
-        Header: 'Hash',
+        Header: 'Name',
         accessor: 'id',
         minWidth: config.ui.table.minCellWidth,
-        Cell: (data) => <HashLink url={`/contracts/${data.original.address}`} hash={data.value} />,
+        Cell: data => <HashLink url={`/contracts/${data.original.address}`} hash={data.value} />,
       },
       {
         Header: 'Address',
         accessor: 'address',
         minWidth: config.ui.table.minCellWidth,
-        Cell: ({value}) => <HashLink url={`/contracts/${value}`} hash={value} />,
+        Cell: ({ value }) => <HashLink url={`/contracts/${value}`} hash={value} />,
       },
       {
-        Header: '',
+        Header: 'Status',
         accessor: 'expiryBlock',
-        Cell: ({value}) => value ? 'Active' : 'Inactive',
+        sortable: true,
+        Cell: ({ value }) => (value ? `Active until block ${value}` : 'Inactive'),
       },
       {
-        Header: 'Active until',
-        accessor: 'expiryBlock',
+        Header: 'Txs',
+        accessor: 'transactionsCount',
+        sortable: true,
         hideOnMobile: true,
-        Cell: ({value}) => value ? `Block #${value}` : '',
+        Cell: ({ value }) => TextUtils.formatNumber(value),
       },
       {
         Header: 'Assets Issued',
-        accessor: 'assetCount',
+        accessor: 'assetsCount',
         hideOnMobile: true,
-        Cell: ({value}) => TextUtils.formatNumber(value),
+        Cell: ({ value }) => TextUtils.formatNumber(value),
       },
     ];
   }
@@ -54,6 +56,8 @@ class ContractsTable extends Component {
         curPage={uiStore.contractsTable.curPage}
         tableDataSetter={uiStore.setContractsTableData.bind(uiStore)}
         topContent={<PageTitle title="Contracts" margin={false} />}
+        defaultSorted={[{ id: 'expiryBlock', desc: true }]}
+        defaultSortDesc={true}
       />
     );
   }

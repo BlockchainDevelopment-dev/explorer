@@ -6,6 +6,7 @@ const contractsDAL = require('../../../server/components/api/contracts/contracts
 const transactionsDAL = require('../../../server/components/api/transactions/transactionsDAL');
 const commandsDAL = require('../../../server/components/api/commands/commandsDAL');
 const getJobData = require('../../lib/getJobData');
+const QueueError = require('../../lib/QueueError');
 
 const DEFAULT_NUM_OF_COMMANDS_TO_TAKE = 100;
 
@@ -37,7 +38,7 @@ class CommandsAdder {
       return numOfRowsAffected;
     } catch (error) {
       logger.error(`An Error has occurred when processing commands: ${error.message}`);
-      throw error;
+      throw new QueueError(error);
     }
   }
 
@@ -103,28 +104,27 @@ class CommandsAdder {
 
   async mapNodeCommandsWithRelations(contractId, commands) {
     // indexInTransaction can not currently be calculated as the results from address db are ordered by command name
-    const promises = [];
+    const mappedCommands = [];
     for (let i = 0; i < commands.length; i++) {
       const command = commands[i];
 
-      promises.push(
-        (async () => {
-          const tx = await transactionsDAL.findOne({ where: { hash: command.txHash } });
-          if (!tx) {
-            logger.error(`Error - could not find a referenced tx with hash=${command.txHash}`);
-          }
-          return {
-            command: command.command,
-            messageBody: command.messageBody,
-            TransactionId: tx.id,
-            indexInTransaction: 0, // can not calculate for now!
-            ContractId: contractId,
-          };
-        })()
-      );
+      const tx = await transactionsDAL.findOne({ where: { hash: command.txHash } });
+      if (!tx) {
+        logger.error(
+          `Could not find a referenced tx with hash=${command.txHash}, contractId=${contractId}`
+        );
+      } else {
+        mappedCommands.push({
+          command: command.command,
+          messageBody: command.messageBody,
+          TransactionId: tx.id,
+          indexInTransaction: 0, // can not calculate for now!
+          ContractId: contractId,
+        });
+      }
     }
 
-    return Promise.all(promises);
+    return mappedCommands;
   }
 
   async getLastCommandTxIndexFromDb(contractId, txHash) {

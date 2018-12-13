@@ -6,6 +6,7 @@ const TaskTimeLimiter = require('./lib/TaskTimeLimiter');
 const Config = require('../server/config/Config');
 const logger = require('./lib/logger')('views-refresh');
 const slackLogger = require('../server/lib/slackLogger');
+const getChain = require('./lib/getChain');
 
 const viewsRefreshQueue = new Queue(
   Config.get('queues:views-refresh:name'),
@@ -27,9 +28,11 @@ viewsRefreshQueue.on('completed', function(job, result) {
 });
 
 viewsRefreshQueue.on('failed', function(job, error) {
-  logger.error(`A job has failed. ID=${job.id}, error=${error}`);
+  logger.error(`A job has failed. ID=${job.id}, error=${error.message}`);
   taskTimeLimiter.executeTask(() => {
-    slackLogger.error(`A viewsRefreshQueue job has failed, error=${error}`);
+    getChain().then(chain => {
+      slackLogger.error(`A viewsRefreshQueue job has failed, error=${error.message} chain=${chain}`);
+    });
   });
 });
 

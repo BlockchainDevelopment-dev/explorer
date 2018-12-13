@@ -8,6 +8,7 @@ const makeLogger = require('./lib/logger');
 const loggerBlocks = makeLogger('blocks');
 const loggerReorg = makeLogger('reorg');
 const slackLogger = require('../server/lib/slackLogger');
+const getChain = require('./lib/getChain');
 const NUM_OF_BLOCKS_IN_CHUNK = Config.get('queues:addBlocks:limitBlocks');
 
 const addBlocksQueue = new Queue(
@@ -26,10 +27,6 @@ addBlocksQueue.process(path.join(__dirname, 'jobs/blocks/addNewBlocks.handler.js
 reorgsQueue.process(path.join(__dirname, 'jobs/blocks/reorgs.handler.js'));
 
 // events
-addBlocksQueue.on('error', function(error) {
-  loggerBlocks.error('A job error has occurred', error);
-});
-
 addBlocksQueue.on('active', function(job, jobPromise) {
   loggerBlocks.info(`A job has started. ID=${job.id}`);
 });
@@ -42,9 +39,11 @@ addBlocksQueue.on('completed', function(job, result) {
 });
 
 addBlocksQueue.on('failed', function(job, error) {
-  loggerBlocks.error(`A job has failed. ID=${job.id}, error=${error}`);
+  loggerBlocks.error(`A job has failed. ID=${job.id}, error=${error.message}`);
   taskTimeLimiter.executeTask(() => {
-    slackLogger.error(`An AddBlocks job has failed, error=${error}`);
+    getChain().then(chain => {
+      slackLogger.error(`An AddBlocks job has failed, error=${error.message} chain=${chain}`);
+    });
   });
   if (error.message === 'Reorg') {
     const message = 'Found a reorg! starting the reorg processor...';
@@ -73,9 +72,9 @@ reorgsQueue.on('completed', function(job, result) {
 });
 
 reorgsQueue.on('failed', function(job, error) {
-  loggerReorg.error(`A job has failed. ID=${job.id}, error=${error}`);
+  loggerReorg.error(`A job has failed. ID=${job.id}, error=${error.message}`);
   taskTimeLimiter.executeTask(() => {
-    slackLogger.error(`An reorgsQueue job has failed, error=${error}`);
+    slackLogger.error(`An reorgsQueue job has failed, error=${error.message}`);
   });
 });
 
@@ -96,6 +95,7 @@ Promise.all([
   addBlocksQueue.add({ limitBlocks: NUM_OF_BLOCKS_IN_CHUNK }, { repeat: { cron: '* * * * *' } });
   // now
   addBlocksQueue.add({ limitBlocks: NUM_OF_BLOCKS_IN_CHUNK });
+  addBlocksQueue.resume();
 });
 
 setInterval(() => {
