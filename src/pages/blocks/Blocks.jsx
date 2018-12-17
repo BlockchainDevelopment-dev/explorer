@@ -35,7 +35,7 @@ class BlocksPage extends Component {
     return (
       <Page className="Blocks">
         <Helmet>
-          <title>{TextUtils.getHtmlTitle('Blocks')}</title>
+          <title>{TextUtils.getHtmlTitle('Blocks', '', true)}</title>
         </Helmet>
         <section>
           <BlocksTable title="LATEST BLOCKS" />
