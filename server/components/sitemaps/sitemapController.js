@@ -16,13 +16,11 @@ module.exports = {
     if(!SITEMAPS.includes(name)) {
       throw new HttpError(httpStatus.NOT_FOUND);
     }
-    console.time('a');
     const sitemaps = await generator[name]();
     if(part >= sitemaps.length) {
       throw new HttpError(httpStatus.NOT_FOUND);
     }
     const result = sitemaps[part].toString();
-    console.timeEnd('a');
     res.header('Content-Type', 'application/xml');
     res.send(result);
   },
