@@ -93,6 +93,7 @@ class TransactionAsset extends Component {
         output: output.data,
         isOutputHash: output.isHash,
         isOutputActive: output.isHash && output.data !== address,
+        outputLockType: output.lockType,
         amount: output.amount,
       });
     }
@@ -130,10 +131,11 @@ class TransactionAsset extends Component {
       return transactionAsset.Outputs.map(output => {
         let amount = output.amount;
         return output.address
-          ? this.getDataItem({ data: output.address, amount })
+          ? this.getDataItem({ data: output.address, amount, lockType: output.lockType })
           : this.getDataItem({
               data: OutputUtils.getTextByLockType(output.lockType),
               amount,
+              lockType: output.lockType,
               isHash: false,
             });
       });
@@ -147,10 +149,11 @@ class TransactionAsset extends Component {
     return outputs.filter(output => output.data === address);
   }
 
-  getDataItem({ data, amount, isHash = true } = {}) {
+  getDataItem({ data, amount, lockType, isHash = true } = {}) {
     return {
       data,
       amount,
+      lockType,
       isHash,
     };
   }
@@ -233,6 +236,10 @@ class TransactionAsset extends Component {
           ) : (
             data.value || '\u00a0'
           ),
+      },
+      {
+        Header: 'Lock',
+        accessor: 'outputLockType',
       },
       {
         Header: 'Total',
