@@ -1,5 +1,7 @@
+@import 'src/style/variables';
 .Contract {
   code {
     max-height: 500px;
+    @include mixin-zen-scrollbar();
   }
 }

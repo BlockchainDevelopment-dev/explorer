@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { observer, inject } from 'mobx-react';
-import config from '../../../../lib/Config';
+import Config from '../../../../lib/Config';
 import AssetUtils from '../../../../lib/AssetUtils';
 import TextUtils from '../../../../lib/TextUtils';
 import HashLink from '../../../../components/HashLink';
@@ -14,7 +14,7 @@ class AssetsTable extends Component {
       {
         Header: 'Asset Identifier',
         accessor: 'asset',
-        minWidth: config.ui.table.minCellWidth,
+        minWidth: Config.ui.table.minCellWidth,
         Cell: ({ value }) => (
           <HashLink
             hash={AssetUtils.getAssetNameFromCode(value)}
@@ -24,27 +24,27 @@ class AssetsTable extends Component {
         ),
       },
       {
-        Header: 'TOKENS OUTSTANDING',
+        Header: 'tokens outstanding',
         accessor: 'outstanding',
         Cell: data => AssetUtils.getAmountString(data.original.asset, data.value),
       },
       {
-        Header: 'TOTAL ISSUED',
+        Header: 'total issued',
         accessor: 'issued',
         Cell: data => AssetUtils.getAmountString(data.original.asset, data.value),
       },
       {
-        Header: 'DESTROYED',
+        Header: 'destroyed',
         accessor: 'destroyed',
         Cell: data => AssetUtils.getAmountString(data.original.asset, data.value),
       },
       {
-        Header: 'UNIQUE ADDRESSES',
+        Header: 'unique addresses',
         accessor: 'keyholders',
         Cell: data => TextUtils.formatNumber(data.value),
       },
       {
-        Header: 'TXS',
+        Header: 'txs',
         accessor: 'transactionsCount',
         Cell: data => TextUtils.formatNumber(data.value),
       },

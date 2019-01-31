@@ -38,12 +38,12 @@ const AssetsTab = observer(props => {
             Cell: data => AssetUtils.getAmountString(data.original.asset, data.value),
           },
           {
-            Header: 'TOKENS DESTROYED',
+            Header: 'DESTROYED',
             accessor: 'destroyed',
             Cell: data => AssetUtils.getAmountString(data.original.asset, data.value),
           },
           {
-            Header: 'UNIQUE KEYHOLDERS',
+            Header: 'UNIQUE ADDRESSES',
             accessor: 'keyholders',
             Cell: data => TextUtils.formatNumber(data.value),
           },
