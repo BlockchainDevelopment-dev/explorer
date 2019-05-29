@@ -1,0 +1,18 @@
+{
+  "tallies": [
+    {
+      "interval": 3,
+      "allocation": {
+        "votes": [
+          {
+            "amount": 0,
+            "count": 1353500000000
+          }
+        ]
+      },
+      "payout": {
+        "votes": []
+      }
+    }
+  ]
+}

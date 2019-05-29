@@ -1,0 +1,29 @@
+{
+  "tallies": [
+    {
+      "interval": 4,
+      "allocation": {
+        "votes": [
+          {
+            "amount": 85,
+            "count": 100500000000
+          }
+        ]
+      },
+      "payout": {
+        "votes": [
+          {
+            "recipient": "tzn1qth9lf8atcusgz0hael2npraezuzhs48te9h5nnhudanpzj8pdvrseej4m6",
+            "amount": 60000000000,
+            "count": 5000000000
+          },
+          {
+            "recipient": "tzn1q799najjmsjqs97jx05calr9xfhmd7dqgdnalzds9wsxx8dv4ajtqmgaev2",
+            "amount": 40000000000,
+            "count": 100500000000
+          }
+        ]
+      }
+    }
+  ]
+}

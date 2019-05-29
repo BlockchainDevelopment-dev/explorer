@@ -39,5 +39,16 @@ class NetworkHelper {
     const release = await Service.zen.getWalletLatestRelease();
     return release ? release.tag_name : 'v0.9';
   }
+
+  // TODO replace with a real call
+  async getCgpCurrent() {
+    return require('../jobs/cgp/test/data/current.json');
+    // return await Service.cgp.current();
+  }
+
+  async getCgpHistory() {
+    return require('../jobs/cgp/test/data/history.json');
+    // return await Service.cgp.history();
+  }
 }
 module.exports = NetworkHelper;

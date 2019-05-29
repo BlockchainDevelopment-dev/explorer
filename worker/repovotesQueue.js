@@ -4,16 +4,16 @@ const path = require('path');
 const queue = require('./lib/queue');
 const TaskTimeLimiter = require('./lib/TaskTimeLimiter');
 const Config = require('../server/config/Config');
-const logger = require('./lib/logger')('votes');
+const logger = require('./lib/logger')('repovotes');
 const slackLogger = require('../server/lib/slackLogger');
 const getChain = require('../server/lib/getChain');
 
-const votesQueue = queue(Config.get('queues:votes:name'));
+const votesQueue = queue(Config.get('queues:repovotes:name'));
 
 const taskTimeLimiter = new TaskTimeLimiter(Config.get('queues:slackTimeLimit') * 1000);
 
 // process ---
-votesQueue.process(path.join(__dirname, 'jobs/votes/votes.handler.js'));
+votesQueue.process(path.join(__dirname, 'jobs/repovotes/votes.handler.js'));
 
 // events
 votesQueue.on('active', function(job, jobPromise) {

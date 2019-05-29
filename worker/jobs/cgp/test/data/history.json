@@ -1,0 +1,160 @@
+[
+  {
+    "tallies": [
+      {
+        "interval": 0,
+        "allocation": {
+          "votes": [
+            {
+              "amount": 20,
+              "count": 5000000000
+            },
+            {
+              "amount": 80,
+              "count": 10000000000
+            }
+          ]
+        },
+        "payout": {
+          "votes": []
+        }
+      }
+    ],
+    "resultAllocation": 5,
+    "resultPayout": {},
+    "fund": 25000000000
+  },
+  {
+    "tallies": [
+      {
+        "interval": 1,
+        "allocation": {
+          "votes": [
+            {
+              "amount": 10,
+              "count": 5000000000
+            },
+            {
+              "amount": 20,
+              "count": 5000000000
+            },
+            {
+              "amount": 30,
+              "count": 5000000000
+            },
+            {
+              "amount": 40,
+              "count": 5000000000
+            },
+            {
+              "amount": 50,
+              "count": 685250000000
+            },
+            {
+              "amount": 70,
+              "count": 5000000000
+            },
+            {
+              "amount": 80,
+              "count": 20000000000
+            },
+            {
+              "amount": 90,
+              "count": 5000000000
+            }
+          ]
+        },
+        "payout": {
+          "votes": [
+            {
+              "recipient": "tzn1qy9ddnq2tdkyejkv7hm9luzgnvy389hqkuuxux8rjua09z95er4yssy2anc",
+              "amount": 1500000000,
+              "count": 140000000000
+            },
+            {
+              "recipient": "tzn1qy88jax6elasenk5jxnhj55e5a7kl900p3kjzctanhj2zw8g3ugkq5u2dw3",
+              "amount": 300000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1qy3a7lhgj2ju2pkg8em5yeumc3vak9fyqfddl3xd5tqfg5dvlfzgsg74l0f",
+              "amount": 300000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1q9mh9p74ygm6dg72pp6xr3zweflw3a0lyy5lk9gcwhjmn0ecw7wxsnuz8g7",
+              "amount": 25000000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1q9ax4txdcsjkfmy656zmdnve37z6xyuk26kcg9y90fn29ltuxqu8qsnpenq",
+              "amount": 2500000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
+              "amount": 25000000000,
+              "count": 685250000000
+            },
+            {
+              "recipient": "tzn1qt9pjr3q74vejwwxs0fvp0syg0y83sxs9exjzkf4kv3d4zl9ft6jsl344gm",
+              "amount": 12450000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1q323tkmuv80hhg5c8s6fhxewq9pd0m362apc6c24p6eus2jslw5xsdy6d3n",
+              "amount": 2000000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1q3m730vv2zh65m549ehhck2xwqznfd0m2vzz4qeqhgs49k0w6zeeq2d0rax",
+              "amount": 4700000000,
+              "count": 5000000000
+            },
+            {
+              "recipient": "tzn1qks0une8r9wp3uvaa3y67jeev9t34rtn7vlh38tu4x6akrxs6cq0syp8zwr",
+              "amount": 19200000000,
+              "count": 5000000000
+            }
+          ]
+        }
+      }
+    ],
+    "resultAllocation": 10,
+    "resultPayout": {
+      "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
+      "amount": 25000000000
+    },
+    "fund": 50000000000
+  },
+  {
+    "tallies": [
+      {
+        "interval": 2,
+        "allocation": {
+          "votes": [
+            {
+              "amount": 0,
+              "count": 858500000000
+            }
+          ]
+        },
+        "payout": {
+          "votes": [
+            {
+              "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
+              "amount": 1000000000,
+              "count": 853500000000
+            }
+          ]
+        }
+      }
+    ],
+    "resultAllocation": 5,
+    "resultPayout": {
+      "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
+      "amount": 1000000000
+    },
+    "fund": 74000000000
+  }
+]
