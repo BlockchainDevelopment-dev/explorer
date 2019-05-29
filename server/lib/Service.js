@@ -18,6 +18,10 @@ const Endpoints = {
     commands: '/addressdb/contract/history',
   },
   oracle: 'http://oracle.zp.io',
+  cgp: {
+    current: '/blockchain/cgp',
+    history: '/blockchain/cgp/history',
+  }
 };
 
 let globalMute = false;
@@ -78,6 +82,20 @@ module.exports = {
         url: Endpoints.contracts.commands,
         method: 'post',
         data,
+      }).then(response => response.data);
+    },
+  },
+  cgp: {
+    async current() {
+      return sendHttpRequest({
+        url: Endpoints.cgp.current,
+        method: 'get',
+      }).then(response => response.data);
+    },
+    async history() {
+      return sendHttpRequest({
+        url: Endpoints.cgp.history,
+        method: 'get',
       }).then(response => response.data);
     },
   },

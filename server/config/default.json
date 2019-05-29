@@ -26,8 +26,11 @@
     "views-refresh": {
       "name": "Refresh materialized views"
     },
-    "votes": {
-      "name": "Votes"
+    "repovotes": {
+      "name": "RepoVotes"
+    },
+    "cgp": {
+      "name": "CGP"
     },
     "snapshots": {
       "name": "Vote Snapshots"

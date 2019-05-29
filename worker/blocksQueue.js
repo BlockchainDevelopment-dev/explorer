@@ -14,6 +14,7 @@ const NUM_OF_BLOCKS_IN_CHUNK = Config.get('queues:addBlocks:limitBlocks');
 const addBlocksQueue = queue(Config.get('queues:addBlocks:name'));
 const reorgsQueue = queue(Config.get('queues:reorgs:name'));
 const snapshotsQueue = queue(Config.get('queues:snapshots:name'));
+const cgpQueue = queue(Config.get('queues:cgp:name'));
 
 const taskTimeLimiter = new TaskTimeLimiter(Config.get('queues:slackTimeLimit') * 1000);
 
@@ -30,8 +31,8 @@ addBlocksQueue.on('completed', function(job, result) {
   loggerBlocks.info(`A job has been completed. ID=${job.id} count=${result.count} latest block added=${result.latest}`);
   if (result.count > 0) {
     addBlocksQueue.add({ limitBlocks: NUM_OF_BLOCKS_IN_CHUNK });
-    // notify snapshots that blocks were added
     snapshotsQueue.add();
+    cgpQueue.add();
   }
 });
 
