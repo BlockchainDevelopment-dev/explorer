@@ -102,6 +102,31 @@ package "Repo Votes" {
   RepoVote "1" <--> "*" Command
 }
 
+package "CGP + Mining" {
+  Table(CgpInterval, "CgpInterval") {
+    primary_key(id)
+    interval
+    resultAllocation
+    resultPayoutRecipient
+    resultPayoutAmount
+    fund
+    status field_comment(open/finished)
+  }
+  Table(AllocationVote, "AllocationVote") {
+    foreign_key(CgpIntervalId)
+    amount
+    zpCount
+  }
+  Table(PayoutVote, "PayoutVote") {
+    foreign_key(CgpIntervalId)
+    recipient
+    amount
+    zpCount
+  }
+  CgpInterval "1" <--> "*" AllocationVote
+  CgpInterval "1" <--> "*" PayoutVote
+}
+
 package "Materialized Views" {
   ' Materialized Views
   Table(AddressAmounts, "AddressAmounts (MV)") {
