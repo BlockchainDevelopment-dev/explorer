@@ -172,6 +172,20 @@
         "payout": {
           "votes": []
         }
+      },
+      {
+        "interval": 12345,
+        "allocation": {
+          "votes": [
+            {
+              "amount": 20,
+              "count": 5000000000
+            }
+          ]
+        },
+        "payout": {
+          "votes": []
+        }
       }
     ],
     "resultAllocation": 0,
