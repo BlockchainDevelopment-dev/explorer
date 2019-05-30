@@ -1,18 +1,14 @@
 'use strict';
 
 const path = require('path');
-const Queue = require('bull');
+const queue = require('./lib/queue');
 const TaskTimeLimiter = require('./lib/TaskTimeLimiter');
 const Config = require('../server/config/Config');
 const logger = require('./lib/logger')('cgp');
 const slackLogger = require('../server/lib/slackLogger');
 const getChain = require('../server/lib/getChain');
 
-const cgpQueue = new Queue(
-  Config.get('queues:cgp:name'),
-  Config.any(['REDISCLOUD_URL', 'redis'])
-);
-
+const cgpQueue = queue(Config.get('queues:cgp:name'));
 const taskTimeLimiter = new TaskTimeLimiter(Config.get('queues:slackTimeLimit') * 1000);
 
 // process ---
