@@ -28,5 +28,11 @@
         "votes": []
       }
     }
-  ]
+  ],
+  "resultAllocation": 5,
+  "resultPayout": {
+    "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
+    "amount": 1000000000
+  },
+  "fund": 74000000000
 }

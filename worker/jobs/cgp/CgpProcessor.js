@@ -25,23 +25,34 @@ class CgpProcessor {
         this.networkHelper.getCgpHistory(),
         this.networkHelper.getCgpCurrent(),
       ]);
-      const history = await this.processHistory(nodeHistory);
-      const current = this.processCurrent(nodeCurrent);
-      const shouldProcessCurrent = this.shouldProcessCurrent({ current, history });
+      const history = await this.processNodeHistory(nodeHistory);
+      const current = this.processNodeCurrent({ current: nodeCurrent, history: nodeHistory });
+      const historyRearranged = this.rearrangeResultsOfHistory({ current, history });
+      const currentWithoutResults = R.assoc(
+        'cgpInterval',
+        R.pick(['interval', 'status'], current.cgpInterval),
+        current
+      );
+      const shouldProcessCurrent = this.shouldProcessCurrent({
+        current: currentWithoutResults,
+        history: historyRearranged,
+      });
 
       // delete all intervals in the processed history and recreate them as finished
-      const historyIntervalNumbers = R.map(R.path(['interval', 'interval']), history);
+      const historyIntervalNumbers = R.map(R.path(['cgpInterval', 'interval']), historyRearranged);
       intervalsDAL.bulkDeleteIntervals(historyIntervalNumbers, this.dbTransaction);
       // map each history element into a promise which creates the interval and votes
-      const historyIntervalsPromises = history.map(element => this.createIntervalAndVotes(element));
+      const historyIntervalsPromises = historyRearranged.map(element =>
+        this.createIntervalAndVotes(element)
+      );
       await Promise.all(historyIntervalsPromises);
 
       // current
       if (shouldProcessCurrent) {
-        await this.upsertIntervalAndVotes(current);
+        await this.upsertIntervalAndVotes(currentWithoutResults);
       }
 
-      const processedIntervals = history.length + (shouldProcessCurrent ? 1 : 0);
+      const processedIntervals = historyRearranged.length + (shouldProcessCurrent ? 1 : 0);
       logger.info(`Finished processing ${processedIntervals} intervals`);
       await this.dbTransaction.commit();
       return processedIntervals;
@@ -59,7 +70,7 @@ class CgpProcessor {
    * Get history items for open or non existing database intervals
    * @param {Array} history
    */
-  async processHistory(history = []) {
+  async processNodeHistory(history = []) {
     const latestFinishedInterval = R.pathOr(
       -1,
       ['interval'],
@@ -67,11 +78,43 @@ class CgpProcessor {
     );
     const restFromHistory = R.slice(latestFinishedInterval + 1, Infinity, history);
 
-    return R.map(element => this.parseNodeElement(element, 'finished'), restFromHistory);
+    const mapIndexed = R.addIndex(R.map);
+    return mapIndexed(
+      (element, i) =>
+        this.parseNodeElement({
+          element,
+          status: 'finished',
+          interval: latestFinishedInterval + 1 + i,
+        }),
+      restFromHistory
+    );
   }
 
-  processCurrent(current = {}) {
-    return this.parseNodeElement(current, 'open');
+  processNodeCurrent({ current = {}, history = [] } = {}) {
+    return this.parseNodeElement({ element: current, status: 'open', interval: history.length });
+  }
+
+  /**
+   * Moves each result to the previous element
+   * In the node, each element contains the results for the previous interval
+   * @returns a new history array in which each element has its own results
+   */
+  rearrangeResultsOfHistory({ current, history } = {}) {
+    if (!current) throw new Error('current interval must be supplied');
+
+    const removeFirst = R.slice(1, Infinity);
+    const changeCurrentStatus = R.assocPath(['cgpInterval', 'status'], 'finished');
+    const appendCurrent = R.append(changeCurrentStatus(current));
+    const changeIntervalsToFitResultsAndRemoveVotes = R.map(element => ({
+      cgpInterval: R.merge(element.cgpInterval, { interval: element.cgpInterval.interval - 1 }),
+    }));
+    const mergeToCurrentHistory = R.zipWith(R.merge, history);
+    return R.compose(
+      mergeToCurrentHistory,
+      changeIntervalsToFitResultsAndRemoveVotes,
+      appendCurrent,
+      removeFirst
+    )(history);
   }
 
   /**
@@ -80,23 +123,21 @@ class CgpProcessor {
    */
   shouldProcessCurrent({ current, history } = {}) {
     const isCurrentInHistory = R.any(
-      R.pathEq(['interval', 'interval'], current.interval.interval),
+      R.pathEq(['cgpInterval', 'interval'], current.cgpInterval.interval),
       history
     );
     return !isCurrentInHistory;
   }
 
   /**
-   * Get an object with the relevant data for the database
-   * @param {Object} element the element from the node
-   * @param {string} status  the interval status to set
+   * Parse the data from the node and get an object with the relevant data for the database
    */
-  parseNodeElement(element, status) {
+  parseNodeElement({ element, status, interval } = {}) {
     const pathOrNull = R.pathOr(null);
     const pathOrEmptyArray = R.pathOr([]);
 
-    const interval = {
-      interval: getNodeInterval(element),
+    const cgpInterval = {
+      interval,
       resultAllocation: pathOrNull(['resultAllocation'], element),
       resultPayoutRecipient: pathOrNull(['resultPayout', 'recipient'], element),
       resultPayoutAmount: pathOrNull(['resultPayout', 'amount'], element),
@@ -105,36 +146,47 @@ class CgpProcessor {
     };
     const allocation = R.compose(
       pathOrEmptyArray(['allocation', 'votes']),
-      getFirstTally
+      getTallyForInterval(interval)
     )(element);
     const payout = R.compose(
       pathOrEmptyArray(['payout', 'votes']),
-      getFirstTally
+      getTallyForInterval(interval)
     )(element);
 
     return {
-      interval,
+      cgpInterval,
       allocation,
       payout,
     };
   }
 
+  /**
+   * Inserts data into the database
+   *
+   * @param {object} element the parsed object ready for the database
+   */
   async createIntervalAndVotes(element) {
-    const interval = await intervalsDAL.create(element.interval, {
+    const cgpInterval = await intervalsDAL.create(element.cgpInterval, {
       transaction: this.dbTransaction,
     });
-    await this.createAllVotesForIntervalId(element, interval.id);
+    await this.createAllVotesForIntervalId(element, cgpInterval.id);
   }
 
+  /**
+   * Inserts data into the database
+   * Uses an existing interval or creates one
+   *
+   * @param {object} element the parsed object ready for the database
+   */
   async upsertIntervalAndVotes(element) {
-    let interval = await intervalsDAL.findByInterval(element.interval.interval);
-    if (!interval) {
-      interval = await intervalsDAL.create(element.interval, {
+    let cgpInterval = await intervalsDAL.findByInterval(element.cgpInterval.interval);
+    if (!cgpInterval) {
+      cgpInterval = await intervalsDAL.create(element.cgpInterval, {
         transaction: this.dbTransaction,
       });
     }
-    await this.deleteAllVotesByIntervalId(interval.id);
-    await this.createAllVotesForIntervalId(element, interval.id);
+    await this.deleteAllVotesByIntervalId(cgpInterval.id);
+    await this.createAllVotesForIntervalId(element, cgpInterval.id);
   }
 
   async deleteAllVotesByIntervalId(id) {
@@ -171,13 +223,10 @@ class CgpProcessor {
 
 module.exports = CgpProcessor;
 
-function getFirstTally(element = {}) {
-  try {
-    return element.tallies[0] || {};
-  } catch (e) {
-    return {};
-  }
-}
-function getNodeInterval(element = {}) {
-  return getFirstTally(element).interval;
+function getTallyForInterval(interval) {
+  return R.compose(
+    R.defaultTo({}),
+    R.find(R.propEq('interval', interval)),
+    R.propOr([], 'tallies')
+  );
 }

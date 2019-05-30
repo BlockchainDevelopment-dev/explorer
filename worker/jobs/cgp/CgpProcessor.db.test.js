@@ -53,6 +53,18 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
       `${given}: should have current as the open interval`
     );
 
+    const interval0 = await intervalsDAL.findByInterval(0);
+    t.equal(
+      interval0.resultAllocation,
+      5,
+      `${given}: should have resultAllocation from the next interval (both in history)`
+    );
+    t.equal(
+      interval0.fund,
+      '25000000000',
+      `${given}: should have fund from the next interval (both in history)`
+    );
+
     after();
   });
 
@@ -170,8 +182,16 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
 
       // check that the previous current was finished and has the right amount of votes
       const interval3 = await intervalsDAL.findOne({ where: { interval: 3 } });
-      t.equal(interval3.fund, '74000000000', `${given}: after 1st update - should update the fund`);
-      t.equal(interval3.status, 'finished', `${given}: after 1st update - should mark as finished`);
+      t.equal(
+        interval3.resultAllocation,
+        0,
+        `${given}: after 1st update - last history interval should have result from current interval`
+      );
+      t.equal(
+        interval3.status,
+        'finished',
+        `${given}: after 1st update - should mark the last history interval as finished`
+      );
       const allocationVotes = await allocationDAL.findAll({
         where: {
           CgpIntervalId: interval3.id,
@@ -189,16 +209,20 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
 
       // check the open interval
       const interval4 = await intervalsDAL.findOne({ where: { interval: 4 } });
-      t.equal(interval4.fund, null, `${given}: after 1st update - interval 4 should not have data`);
+      t.equal(
+        interval4.fund,
+        null,
+        `${given}: after 1st update - interval 4 (current) should not have data`
+      );
       t.equal(
         await allocationDAL.count({ where: { CgpIntervalId: interval4.id } }),
         0,
-        `${given}: after 1st update - interval 4 should have 0 allocation votes`
+        `${given}: after 1st update - interval 4 (current) should have 0 allocation votes`
       );
       t.equal(
         await payoutDAL.count({ where: { CgpIntervalId: interval4.id } }),
         1,
-        `${given}: after 1st update - interval 4 should have 1 payout vote`
+        `${given}: after 1st update - interval 4 (current) should have 1 payout vote`
       );
       after();
     })();
@@ -234,12 +258,12 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
       t.equal(
         allocationVotes.length,
         1,
-        `${given}: after 2nd update - interval 4 should have 1 allocation vote`
+        `${given}: after 2nd update - interval 4 (current) should have 1 allocation vote`
       );
       t.equal(
         payoutVotes.length,
         2,
-        `${given}: after 2nd update - interval 4 should have 2 payout votes`
+        `${given}: after 2nd update - interval 4 (current) should have 2 payout votes`
       );
       t.assert(
         allocationVotes[0].zpCount === '100500000000' && allocationVotes[0].amount === 85,
@@ -255,6 +279,142 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
       );
       after();
     })();
+
+    await wrapTest('Given empty tallies', async given => {
+      before({
+        current: {
+          tallies: [
+            {
+              interval: 1,
+              allocation: {
+                votes: [
+                  {
+                    amount: 0,
+                    count: 5000000000,
+                  },
+                ],
+              },
+              payout: {
+                votes: [
+                  {
+                    recipient: 'tzn1qy2400evm8u40th7t96py7fqe2eq52u0thr5xy6jvsta25a26y4lsjaa7c4',
+                    amount: 4000000000,
+                    count: 5000000000,
+                  },
+                ],
+              },
+            },
+          ],
+          resultAllocation: 20,
+          resultPayout: {},
+          fund: 771000000000,
+        },
+        history: [
+          {
+            tallies: [],
+            resultAllocation: 0,
+            resultPayout: {},
+            fund: 0,
+          },
+        ],
+      });
+      const result = await cgpProcessor.doJob();
+      t.equal(result, 2, `${given}: should process all intervals`);
+
+      const intervalsCount = await intervalsDAL.count();
+      t.equal(intervalsCount, 2, `${given}: should have all intervals in db`);
+
+      const openIntervals = await intervalsDAL.findAll({
+        where: {
+          status: 'open',
+        },
+      });
+      t.equal(openIntervals.length, 1, `${given}: should have 1 open interval`);
+      t.equal(openIntervals[0].interval, 1, `${given}: should have current as the open interval`);
+
+      const interval0 = await intervalsDAL.findByInterval(0);
+      t.equal(
+        interval0.resultAllocation,
+        20,
+        `${given}: should have resultAllocation from the next interval`
+      );
+      t.equal(interval0.fund, '771000000000', `${given}: should have fund from the next interval`);
+
+      after();
+    });
+
+    await wrapTest('Given future votes only', async given => {
+      before({
+        current: {
+          tallies: [
+            {
+              interval: 11,
+              allocation: {
+                votes: [
+                  {
+                    amount: 0,
+                    count: 5000000000,
+                  },
+                ],
+              },
+              payout: {
+                votes: [
+                  {
+                    recipient: 'tzn1qy2400evm8u40th7t96py7fqe2eq52u0thr5xy6jvsta25a26y4lsjaa7c4',
+                    amount: 4000000000,
+                    count: 5000000000,
+                  },
+                ],
+              },
+            },
+          ],
+          resultAllocation: 20,
+          resultPayout: {},
+          fund: 771000000000,
+        },
+        history: [
+          {
+            tallies: [
+              {
+                interval: 23,
+                allocation: {
+                  votes: [
+                    {
+                      amount: 0,
+                      count: 5000000000,
+                    },
+                  ],
+                },
+                payout: {
+                  votes: [
+                    {
+                      recipient: 'tzn1qy2400evm8u40th7t96py7fqe2eq52u0thr5xy6jvsta25a26y4lsjaa7c4',
+                      amount: 4000000000,
+                      count: 5000000000,
+                    },
+                  ],
+                },
+              },
+            ],
+            resultAllocation: 0,
+            resultPayout: {},
+            fund: 0,
+          },
+        ],
+      });
+      await cgpProcessor.doJob();
+
+      const intervalsCount = await intervalsDAL.count();
+      t.equal(intervalsCount, 2, `${given}: should have all intervals in db`);
+
+      const allocationVotes = await allocationDAL.count();
+      t.equal(allocationVotes, 0, `${given}: should have 0 allocation votes in db`);
+
+      const payoutVotes = await payoutDAL.count();
+      t.equal(payoutVotes, 0, `${given}: should have 0 payout votes in db`);
+
+      after();
+    });
   });
 });
 

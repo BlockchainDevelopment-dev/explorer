@@ -20,9 +20,9 @@
         }
       }
     ],
-    "resultAllocation": 5,
+    "resultAllocation": 0,
     "resultPayout": {},
-    "fund": 25000000000
+    "fund": 0
   },
   {
     "tallies": [
@@ -120,12 +120,9 @@
         }
       }
     ],
-    "resultAllocation": 10,
-    "resultPayout": {
-      "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
-      "amount": 25000000000
-    },
-    "fund": 50000000000
+    "resultAllocation": 5,
+    "resultPayout": {},
+    "fund": 25000000000
   },
   {
     "tallies": [
@@ -150,11 +147,11 @@
         }
       }
     ],
-    "resultAllocation": 5,
+    "resultAllocation": 10,
     "resultPayout": {
       "recipient": "tzn1qxp6ekp72q8903efylsnej34pa940cd2xae03l49pe7hkg3mrc26qyh2rgr",
-      "amount": 1000000000
+      "amount": 25000000000
     },
-    "fund": 74000000000
+    "fund": 50000000000
   }
 ]
