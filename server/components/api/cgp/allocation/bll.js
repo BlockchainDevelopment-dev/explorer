@@ -27,4 +27,7 @@ module.exports = {
       votesDAL.findAllByInterval(query),
     ]).then(votesDAL.getItemsAndCountResult);
   },
+  getTotalZpParticipated: async function({ interval } = {}) {
+    return votesDAL.totalZpParticipated({ interval });
+  },
 };

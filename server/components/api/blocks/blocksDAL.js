@@ -135,7 +135,7 @@ blocksDAL.updateByBlockNumber = async function(blockNumber, values = {}, options
     this.db[this.model]
       .findOne({ where: { blockNumber } })
       .then(model => {
-        return model.update(values, deepMerge({ individualHooks: true }, options));
+        return model.update(values, options);
       })
       .then(resolve)
       .catch(error => {

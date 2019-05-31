@@ -44,4 +44,19 @@ allocationVotesDal.countByInterval = async function({ interval } = {}) {
   });
 };
 
+allocationVotesDal.totalZpParticipated = async function({ interval } = {}) {
+  return this.sum('zpCount', {
+    include: [
+      {
+        model: this.db.CgpInterval,
+        attributes: [],
+        required: true,
+        where: {
+          interval,
+        },
+      },
+    ],
+  });
+};
+
 module.exports = allocationVotesDal;
