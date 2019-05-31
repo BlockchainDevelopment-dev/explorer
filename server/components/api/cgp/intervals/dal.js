@@ -34,66 +34,22 @@ cgpIntervalsDAL.findByInterval = async function(interval) {
   });
 };
 
-// cgpIntervalsDAL.findCurrent = async function(currentBlock) {
-//   return this.findOne({
-//     where: {
-//       [Op.and]: {
-//         beginHeight: {
-//           [Op.lte]: currentBlock,
-//         },
-//         endHeight: {
-//           [Op.gt]: currentBlock,
-//         },
-//       },
-//     },
-//     order: [['beginHeight', 'ASC']],
-//   });
-// };
-
-// cgpIntervalsDAL.findPrev = async function(currentBlock) {
-//   return this.findOne({
-//     where: {
-//       endHeight: {
-//         [Op.lte]: currentBlock,
-//       },
-//     },
-//     order: [['endHeight', 'DESC']],
-//   });
-// };
-
-// /**
-//  * Find a few recent intervals
-//  *
-//  * @param {number} currentBlock
-//  */
-// cgpIntervalsDAL.findAllRecent = async function(currentBlock, limit = 5) {
-//   const [prevs, current, next] = await Promise.all([
-//     this.findAll({
-//       where: {
-//         endHeight: {
-//           [Op.lte]: currentBlock,
-//         },
-//       },
-//       order: [['endHeight', 'DESC']],
-//       limit,
-//     }),
-//     this.findCurrent(currentBlock),
-//     this.findNext(currentBlock),
-//   ]);
-
-//   const intervals = [];
-//   next && intervals.push(next);
-//   current && intervals.push(current);
-//   intervals.push.apply(intervals, prevs);
-//   return intervals;
-// };
-
 /**
- * Sets hasSnapshot to true
- * @param {number} id
+ * Find a few recent intervals by the current state of the database
+ *
+ * @param {number} lastInterval the last interval to get
+ * @param {number} [limit=5]
  */
-cgpIntervalsDAL.setStatus = async function(id, status) {
-  return this.update(id, { status });
+cgpIntervalsDAL.findAllRecent = async function(lastInterval, limit = 5) {
+  return this.findAll({
+    where: {
+      interval: {
+        [Op.lte]: lastInterval,
+      },
+    },
+    order: [['interval', 'DESC']],
+    limit,
+  });
 };
 
 module.exports = cgpIntervalsDAL;
