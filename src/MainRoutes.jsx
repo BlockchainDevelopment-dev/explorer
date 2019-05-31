@@ -80,6 +80,11 @@ const Governance = Loadable({
   loading: AsyncComponentLoading,
   delay,
 });
+const Cgp = Loadable({
+  loader: () => import(/* webpackChunkName: "cgp" */ './pages/cgp'),
+  loading: AsyncComponentLoading,
+  delay,
+});
 const NotFound = Loadable({
   loader: () => import(/* webpackChunkName: "notFound" */ './pages/notFound'),
   loading: AsyncComponentLoading,
@@ -106,6 +111,8 @@ export default function MainRoutes() {
       <Route path="/assets/:asset" component={Asset} />
       <Route path="/governance/:interval" component={Governance} />
       <Redirect from="/governance" to="/governance/0" />
+      <Route path="/cgp/:interval" component={Cgp} />
+      <Redirect from="/cgp" to="/cgp/_" />
       <Route component={NotFound} />
     </Switch>
   );

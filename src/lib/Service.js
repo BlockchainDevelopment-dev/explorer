@@ -16,6 +16,7 @@ const Endpoints = {
   oracle: '/api/oracle',
   contractTemplates: '/api/contractTemplates',
   votes: '/api/votes',
+  cgp: '/api/cgp',
 };
 
 let globalMute = false;
@@ -325,6 +326,36 @@ export default {
     findRecentIntervals(params) {
       return cancelableHttpRequest({
         url: `${Endpoints.votes}/intervals`,
+        method: 'get',
+        params,
+      });
+    },
+  },
+  cgp: {
+    findCurrent(interval, params) {
+      return cancelableHttpRequest({
+        url: `${Endpoints.cgp}/intervals/${interval}`,
+        method: 'get',
+        params,
+      });
+    },
+    findRecentIntervals(params) {
+      return cancelableHttpRequest({
+        url: `${Endpoints.cgp}/intervals`,
+        method: 'get',
+        params,
+      });
+    },
+    findAllAllocation(interval, params) {
+      return cancelableHttpRequest({
+        url: `${Endpoints.cgp}/intervals/${interval}/allocation`,
+        method: 'get',
+        params,
+      });
+    },
+    findAllPayout(interval, params) {
+      return cancelableHttpRequest({
+        url: `${Endpoints.cgp}/intervals/${interval}/payout`,
         method: 'get',
         params,
       });
