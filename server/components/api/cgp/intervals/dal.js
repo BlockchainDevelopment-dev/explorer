@@ -2,12 +2,30 @@
 
 const dal = require('../../../../lib/dal');
 const db = require('../../../../db/sequelize/models');
+const constants = require('../lib/constants');
 
 const cgpIntervalsDAL = dal.createDAL('CgpInterval');
-const Op = db.Sequelize.Op;
+const Sequelize = db.Sequelize;
+const Op = Sequelize.Op;
+
+// attributes to add the begin and end heights to the intervals
+const BEGIN_HEIGHT_ATTRIBUTE = [
+  Sequelize.literal(`"interval" * ${constants.INTERVAL_LENGTH} + 1`),
+  'beginHeight',
+];
+const END_HEIGHT_ATTRIBUTE = [
+  Sequelize.literal(`"interval" * ${constants.INTERVAL_LENGTH} + ${constants.INTERVAL_LENGTH}`),
+  'endHeight',
+];
 
 cgpIntervalsDAL.findLatestFinished = async function() {
   return this.findOne({
+    attributes: {
+      include: [
+        BEGIN_HEIGHT_ATTRIBUTE,
+        END_HEIGHT_ATTRIBUTE,
+      ],
+    },
     where: {
       status: 'finished',
     },
@@ -28,6 +46,12 @@ cgpIntervalsDAL.bulkDeleteIntervals = async function(intervals = [], transaction
 
 cgpIntervalsDAL.findByInterval = async function(interval) {
   return this.findOne({
+    attributes: {
+      include: [
+        BEGIN_HEIGHT_ATTRIBUTE,
+        END_HEIGHT_ATTRIBUTE,
+      ],
+    },
     where: {
       interval,
     },
@@ -42,6 +66,12 @@ cgpIntervalsDAL.findByInterval = async function(interval) {
  */
 cgpIntervalsDAL.findAllRecent = async function(lastInterval, limit = 5) {
   return this.findAll({
+    attributes: {
+      include: [
+        BEGIN_HEIGHT_ATTRIBUTE,
+        END_HEIGHT_ATTRIBUTE,
+      ],
+    },
     where: {
       interval: {
         [Op.lte]: lastInterval,
