@@ -8,7 +8,7 @@ const getCurrentInterval = require('../lib/getCurrentInterval');
 module.exports = {
   findInterval: async function({ interval } = {}) {
     const currentBlock = await blocksBLL.latestBlockNumber();
-    return getCurrentCgpInterval(interval, currentBlock);
+    return intervalsDAL.toJSON(await getCurrentCgpInterval(interval, currentBlock));
   },
   findRecentIntervals: async function({ limit } = {}) {
     const currentInterval = getCurrentInterval(await blocksBLL.latestBlockNumber());

@@ -83,7 +83,7 @@ const createDAL = modelName => {
         this.db[this.model]
           .findByPk(id)
           .then(model => {
-            return model.update(values, deepMerge({ individualHooks: true }, options));
+            return model.update(values, options);
           })
           .then(resolve)
           .catch(error => {
@@ -94,7 +94,7 @@ const createDAL = modelName => {
     async bulkUpdate(values = {}, options = {}) {
       return new Promise((resolve, reject) => {
         this.db[this.model]
-          .update(values, deepMerge({ individualHooks: true }, options))
+          .update(values, options)
           .then(resolve)
           .catch(error => {
             reject(wrapORMErrors(error));
