@@ -28,13 +28,8 @@ class CgpProcessor {
       const history = await this.processNodeHistory(nodeHistory);
       const current = this.processNodeCurrent({ current: nodeCurrent, history: nodeHistory });
       const historyRearranged = this.rearrangeResultsOfHistory({ current, history });
-      const currentWithoutResults = R.assoc(
-        'cgpInterval',
-        R.pick(['interval', 'status', 'fund'], current.cgpInterval),
-        current
-      );
       const shouldProcessCurrent = this.shouldProcessCurrent({
-        current: currentWithoutResults,
+        current,
         history: historyRearranged,
       });
 
@@ -49,7 +44,7 @@ class CgpProcessor {
 
       // current
       if (shouldProcessCurrent) {
-        await this.upsertIntervalAndVotes(currentWithoutResults);
+        await this.upsertIntervalAndVotes(current);
       }
 
       const processedIntervals = historyRearranged.length + (shouldProcessCurrent ? 1 : 0);
@@ -182,6 +177,10 @@ class CgpProcessor {
     let cgpInterval = await intervalsDAL.findByInterval(element.cgpInterval.interval);
     if (!cgpInterval) {
       cgpInterval = await intervalsDAL.create(element.cgpInterval, {
+        transaction: this.dbTransaction,
+      });
+    } else {
+      await intervalsDAL.update(cgpInterval.id, element.cgpInterval, {
         transaction: this.dbTransaction,
       });
     }

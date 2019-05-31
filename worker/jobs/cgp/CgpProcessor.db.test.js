@@ -52,6 +52,11 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
       currentData.tallies[0].interval,
       `${given}: should have current as the open interval`
     );
+    t.equal(
+      openIntervals[0].resultAllocation,
+      currentData.resultAllocation,
+      `${given}: The open interval should have the result allocation`
+    );
 
     const interval0 = await intervalsDAL.findByInterval(0);
     t.equal(
@@ -245,6 +250,11 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
       );
 
       const interval4 = await intervalsDAL.findOne({ where: { interval: 4 } });
+      t.equal(
+        interval4.resultAllocation,
+        currentData1Updated.resultAllocation,
+        `${given}: after 2nd update - Should update resultAllocation on the open interval`
+      );
       const allocationVotes = await allocationDAL.findAll({
         where: {
           CgpIntervalId: interval4.id,
