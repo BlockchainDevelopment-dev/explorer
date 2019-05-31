@@ -211,8 +211,8 @@ test('CgpProcessor.doJob() (DB)', async function(t) {
       const interval4 = await intervalsDAL.findOne({ where: { interval: 4 } });
       t.equal(
         interval4.fund,
-        null,
-        `${given}: after 1st update - interval 4 (current) should not have data`
+        '74000000000',
+        `${given}: after 1st update - interval 4 (current) should have the fund`
       );
       t.equal(
         await allocationDAL.count({ where: { CgpIntervalId: interval4.id } }),
