@@ -30,7 +30,7 @@ class CgpProcessor {
       const historyRearranged = this.rearrangeResultsOfHistory({ current, history });
       const currentWithoutResults = R.assoc(
         'cgpInterval',
-        R.pick(['interval', 'status'], current.cgpInterval),
+        R.pick(['interval', 'status', 'fund'], current.cgpInterval),
         current
       );
       const shouldProcessCurrent = this.shouldProcessCurrent({
