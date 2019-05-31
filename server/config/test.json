@@ -26,5 +26,9 @@
   },
   "governance": {
     "afterTallyBlocks": 10
+  },
+  "cgp": {
+    "afterTallyBlocks": 10,
+    "intervalLength": 100
   }
 }
