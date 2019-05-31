@@ -44,7 +44,11 @@ module.exports = {
     const { interval, page, pageSize } = req.query;
     const formattedInterval = formatInterval(interval);
 
-    const result = await votesBLL.findAllVoteResults({ interval: formattedInterval, page, pageSize });
+    const result = await votesBLL.findAllVoteResults({
+      interval: formattedInterval,
+      page,
+      pageSize,
+    });
     if (result) {
       res.status(httpStatus.OK).json(jsonResponse.create(httpStatus.OK, result));
     } else {
@@ -52,7 +56,7 @@ module.exports = {
     }
   },
   recentIntervals: async function(req, res) {
-    const result = await votesBLL.findRecentIntervals()
+    const result = await votesBLL.findRecentIntervals();
     res.status(httpStatus.OK).json(jsonResponse.create(httpStatus.OK, result));
   },
 };
