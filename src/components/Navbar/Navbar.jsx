@@ -158,8 +158,8 @@ class Navbar extends Component {
                   </DropDown>
                 </li>
                 <li className="nav-item">
-                  <NavLink className="nav-link" to="/governance">
-                    Governance
+                  <NavLink className="nav-link" to="/cgp">
+                    Voting
                   </NavLink>
                 </li>
               </ul>
