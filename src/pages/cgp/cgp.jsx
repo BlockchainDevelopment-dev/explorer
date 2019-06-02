@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { reaction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import { Route, Switch, Redirect } from 'react-router-dom';
@@ -47,7 +48,7 @@ class CgpPage extends React.Component {
     return getVoteStatus({
       currentBlock: this.currentBlock,
       beginHeight: this.cgpStore.relevantInterval.beginHeight,
-      endHeight: this.cgpStore.relevantInterval.endHeight,
+      endHeight: this.cgpStore.relevantInterval.endHeight + 1,
     });
   }
 
@@ -69,10 +70,16 @@ class CgpPage extends React.Component {
       this.loadRelevantInterval();
     }
 
+    this.reloadOnBlocksCountChange();
+
     // load once only
     if (!this.cgpStore.recentIntervals.length) {
       this.cgpStore.loadRecentIntervals();
     }
+  }
+
+  componentWillUnmount() {
+    this.stopReload();
   }
 
   componentDidUpdate(prevProps) {
@@ -86,6 +93,25 @@ class CgpPage extends React.Component {
 
   loadRelevantInterval() {
     this.cgpStore.loadRelevantInterval(this.intervalRouteParam);
+  }
+
+  reloadOnBlocksCountChange() {
+    this.forceDisposer = reaction(
+      () => this.currentBlock,
+      () => {
+        // only an open interval can change 
+        if (this.cgpStore.relevantInterval.status === 'open') {
+          this.cgpStore.loadRelevantInterval(this.intervalRouteParam).then(() => {
+            if (this.cgpStore.relevantInterval.status === 'finished') {
+              this.cgpStore.loadRecentIntervals();
+            }
+          });
+        }
+      }
+    );
+  }
+  stopReload() {
+    this.forceDisposer();
   }
 
   render() {
