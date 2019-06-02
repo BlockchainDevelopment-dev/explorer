@@ -94,6 +94,7 @@ class TransactionAsset extends Component {
         isInputHash: input.isHash,
         isInputActive: input.isHash && input.data !== address,
         output: output.data,
+        outputExtra: output.extraData,
         isOutputHash: output.isHash,
         isOutputActive: output.isHash && output.data !== address,
         amount: output.amount,
@@ -132,8 +133,9 @@ class TransactionAsset extends Component {
     } else {
       return transactionAsset.Outputs.map(output => {
         let amount = output.amount;
+        const extraData = (output.lockType || '').toLowerCase() === 'vote' ? '(Vote)' : '';
         return output.address
-          ? this.getDataItem({ data: output.address, amount })
+          ? this.getDataItem({ data: output.address, extraData, amount })
           : this.getDataItem({
               data: OutputUtils.getTextByLockType(output.lockType),
               amount,
@@ -150,9 +152,10 @@ class TransactionAsset extends Component {
     return outputs.filter(output => output.data === address);
   }
 
-  getDataItem({ data, amount, isHash = true } = {}) {
+  getDataItem({ data, extraData, amount, isHash = true } = {}) {
     return {
       data,
+      extraData,
       amount,
       isHash,
     };
@@ -222,11 +225,14 @@ class TransactionAsset extends Component {
         minWidth: config.ui.table.minCellWidth,
         Cell: data =>
           data.original.isOutputHash ? (
-            <AddressLink
-              address={data.value}
-              active={data.original.isOutputActive}
-              hash={data.value}
-            />
+            <>
+              <AddressLink
+                address={data.value}
+                active={data.original.isOutputActive}
+                hash={data.value}
+              />{' '}
+              {data.original.outputExtra}
+            </>
           ) : (
             data.value || '\u00a0'
           ),
