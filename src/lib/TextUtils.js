@@ -61,7 +61,7 @@ export default {
   getHtmlTitle(page, item, showSeparator = false) {
     const itemDisplay = item ? ` ${item}` : '';
     const separator = showSeparator ? ' - ' : ' ';
-    return `Zen Protocol${separator}${page}${itemDisplay}`;
+    return `Yesod${separator}${page}${itemDisplay}`;
   },
   /**
    * Get an ordinal string (1st, 2nd, ...) from a number

@@ -1,6 +1,8 @@
 @import 'src/style/variables';
 
 .GenericTable .ReactTable {
+  border: none;
+  
   .rt-thead .rt-tr {
     border-bottom: 1px solid $black;
   }
@@ -82,6 +84,8 @@
   }
   .-pagination {
     justify-content: flex-end;
+    box-shadow: none;
+    border-top: none
   }
   
   .pagination-bottom .pagination {

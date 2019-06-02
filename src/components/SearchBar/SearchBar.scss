@@ -12,7 +12,7 @@
   .input-group {
     .btn-outline-dark,
     .input-search {
-      background-color: $gray-700;
+      background-color: $black;
       transition: background-color 0.15s;
       border: 0;
     }
@@ -26,7 +26,6 @@
         color: $gray-400;
       }
     }
-
   }
   
   &.form-search .input-group {

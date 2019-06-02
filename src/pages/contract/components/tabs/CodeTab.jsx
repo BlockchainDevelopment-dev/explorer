@@ -17,6 +17,7 @@ export default inject('rootStore')(
         <Button
           className="float-right mb-4"
           size="sm"
+          type="lightest"
           onClick={() => download(contractStore.contract)}
         >
           Download contract
