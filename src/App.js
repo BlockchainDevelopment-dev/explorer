@@ -52,7 +52,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="navbar-container fixed-top">
-          <TestnetBar />
+          {/* <TestnetBar /> */}
           <Navbar />
         </div>
         <div className="App-separator mb-3 mb-lg-7" />
