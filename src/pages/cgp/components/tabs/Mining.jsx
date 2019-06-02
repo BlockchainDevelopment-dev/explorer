@@ -5,6 +5,7 @@ import WithSetIdOnUiStore from '../../../../components/hoc/WithSetIdOnUiStore';
 import AssetUtils from '../../../../lib/AssetUtils';
 import { TabPanel } from '../../../../components/tabs';
 import { ItemsTable } from '../../../../components/ItemsTable';
+import displayMiningResult from '../../utils/displayMiningResult';
 
 
 class MiningTab extends Component {
@@ -33,9 +34,9 @@ class MiningTab extends Component {
         <ItemsTable
           columns={[
             {
-              Header: '%MR - %CGP',
+              Header: 'MR - CGP',
               accessor: 'amount',
-              Cell: ({value}) => `%${100 - value} - %${value}`,
+              Cell: ({value}) => displayMiningResult(value),
             },
             {
               Header: 'Total Zp',

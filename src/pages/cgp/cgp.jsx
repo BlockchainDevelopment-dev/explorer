@@ -17,6 +17,7 @@ import ItemNotFound from '../../components/ItemNotFound';
 import Loading from '../../components/Loading';
 import Dropdown from '../../components/Dropdown';
 import AddressLink from '../../components/AddressLink';
+import displayMiningResult from './utils/displayMiningResult';
 import './cgp.scss';
 
 class CgpPage extends React.Component {
@@ -204,7 +205,7 @@ function AfterVoteInfo({ resultAllocation, resultPayoutRecipient, resultPayoutAm
       <div className="row">
         <InfoBox
           title="Mining Allocation / CGP"
-          content={`%${100 - resultAllocation} - %${resultAllocation}`}
+          content={displayMiningResult(resultAllocation)}
           iconClass="fal fa-money-check fa-fw"
         />
         <InfoBox
@@ -268,7 +269,7 @@ function SummaryTable({
           <>
             <tr>
               <td>PREVIOUS MINING ALLOCATION</td>
-              <td>{`%${100 - resultAllocation} - %${resultAllocation}`}</td>
+              <td>{displayMiningResult(resultAllocation)}</td>
             </tr>
             <tr>
               <td>PREVIOUS CGP DISTRIBUTION</td>
