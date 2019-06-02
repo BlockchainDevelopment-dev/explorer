@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import MainRoutes from './MainRoutes.jsx';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import TestnetBar from './components/TestnetBar';
+import Footer from './components/FooterYesod';
+// import TestnetBar from './components/TestnetBar';
 import bindEventHandlers from './lib/bindEventHandlers';
 import './App.scss';
 
