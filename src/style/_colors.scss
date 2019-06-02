@@ -1,20 +1,20 @@
-$white: #f2f2f2;
+$white: #0d0d0d;
 $gray-100: #f8f9fa;
 $gray-200: #e9ecef;
 $gray-300: #dee2e6;
-$gray-400: #cccccc;
-$gray-500: #999999;
-$gray-600: #1b2024;
-$gray-700: #14171a;
-$gray-800: #0f1113;
-$gray-900: #08090a;
-$gray-1000: #010203;
+$gray-400: #333333;
+$gray-500: #666666;
+$gray-600: #dbdbdb;
+$gray-700: #e5e5e5;
+$gray-800: #ededed;
+$gray-900: #f5f5f5;
+$gray-1000: #fcfcfc;
 $gray: $gray-500;
-$black : #000000;
+$black : #ffffff;
 $black-accent: $gray-900;
 
-$blue-soft: #83d3ee;
-$blue: #3384f3;
+$blue-soft: #3384f3;
+$blue: #000000;
 $indigo : #6610f2;
 $purple : #6f42c1;
 $pink : #e83e8c;
@@ -52,7 +52,7 @@ $warning : $yellow;
 $danger : $red;
 $light : $gray-400;
 $dark : $gray-600;
-$dark-2 : #242424;
+$dark-2 : #dbdbdb;
 
 $theme-colors: ();
 $theme-colors: map-merge((
