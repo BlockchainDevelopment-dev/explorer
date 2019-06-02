@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import MainRoutes from './MainRoutes.jsx';
 import Navbar from './components/Navbar';
-import Footer from './components/Footer';
-import TestnetBar from './components/TestnetBar';
+import Footer from './components/FooterYesod';
+// import TestnetBar from './components/TestnetBar';
 import bindEventHandlers from './lib/bindEventHandlers';
 import './App.scss';
 
@@ -52,7 +52,7 @@ class App extends Component {
     return (
       <div className="App">
         <div className="navbar-container fixed-top">
-          <TestnetBar />
+          {/* <TestnetBar /> */}
           <Navbar />
         </div>
         <div className="App-separator mb-3 mb-lg-7" />
