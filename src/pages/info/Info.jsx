@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { reaction } from 'mobx';
 import { observer, inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
-import TextUtils from '../../lib/TextUtils.js';
+import TextUtils from '../../lib/TextUtils';
+import AssetUtils from '../../lib/AssetUtils';
 import Loading from '../../components/Loading';
 import Button from '../../components/buttons/Button';
 import { ChartLoader } from '../../components/charts';
@@ -58,7 +59,7 @@ class InfoPage extends Component {
       return null;
     }
 
-    const { chain, blocks, transactions, difficulty, nodeVersion, walletVersion } = infos;
+    const { chain, blocks, transactions, difficulty, nodeVersion, walletVersion, cgpFund } = infos;
     const formattedHashRate = formatHashRate(infos);
 
     return (
@@ -98,8 +99,16 @@ class InfoPage extends Component {
             <InfoBox
               className="hashrate"
               title="Network Hashrate"
-              content={`${TextUtils.formatNumber(formattedHashRate.value)} ${formattedHashRate.unit}`}
+              content={`${TextUtils.formatNumber(formattedHashRate.value)} ${
+                formattedHashRate.unit
+              }`}
               iconClass="fal fa-tachometer-alt-fastest fa-fw"
+            />
+            <InfoBox
+              className="cgp-fund"
+              title="CGP Funds"
+              content={AssetUtils.getAmountString('00', cgpFund)}
+              iconClass="fal fa-coins fa-fw"
             />
           </div>
           <div className="row bg-black-accent">

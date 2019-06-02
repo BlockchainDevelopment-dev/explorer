@@ -7,6 +7,7 @@ const db = require('../../../server/db/sequelize/models');
 const intervalsDAL = require('../../../server/components/api/cgp/intervals/dal');
 const allocationDAL = require('../../../server/components/api/cgp/allocation/dal');
 const payoutDAL = require('../../../server/components/api/cgp/payout/dal');
+const infosDAL = require('../../../server/components/api/infos/infosDAL');
 
 /**
  * Processes CGP intervals, allocation votes and payout votes
@@ -40,7 +41,10 @@ class CgpProcessor {
       const historyIntervalsPromises = historyRearranged.map(element =>
         this.createIntervalAndVotes(element)
       );
-      await Promise.all(historyIntervalsPromises);
+      await Promise.all([
+        Promise.all(historyIntervalsPromises),
+        this.upsertFundInInfos(current.cgpInterval.fund),
+      ]);
 
       // current
       if (shouldProcessCurrent) {
@@ -217,6 +221,24 @@ class CgpProcessor {
       await allocationDAL.bulkCreate(allocationVotes, { transaction: this.dbTransaction }),
       await payoutDAL.bulkCreate(payoutVotes, { transaction: this.dbTransaction }),
     ]);
+  }
+
+  /**
+   * Update or create the current fund in infos
+   */
+  async upsertFundInInfos(fund) {
+    const name = 'cgpFund';
+    const info = await infosDAL.findByName(name);
+    if (info) {
+      await infosDAL.update(info.id, {
+        value: fund,
+      });
+    } else {
+      await infosDAL.create({
+        name,
+        value: fund,
+      });
+    }
   }
 }
 
