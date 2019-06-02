@@ -7,6 +7,7 @@ const assetsBLL = require('../api/assets/assetsBLL');
 const infosBLL = require('../api/infos/infosBLL');
 const votesBLL = require('../api/votes/votesBLL');
 const cgpIntervalsBLL = require('../api/cgp/intervals/bll');
+const formatInterval = require('../api/cgp/lib/formatInterval');
 
 module.exports = async req => {
   const { routeName } = req;
@@ -168,8 +169,9 @@ async function getRepoVoteStoreData(req) {
 }
 
 async function getCgpStoreData(req) {
+  const { interval } = req.params;
   const [relevantInterval, recentIntervals] = await Promise.all([
-    cgpIntervalsBLL.findInterval(req.params),
+    cgpIntervalsBLL.findInterval({ interval: formatInterval(interval) }),
     cgpIntervalsBLL.findRecentIntervals(),
   ]);
   return {

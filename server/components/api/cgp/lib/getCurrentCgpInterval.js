@@ -12,6 +12,8 @@ async function getCurrentCgpInterval(interval, currentBlock) {
   if (interval) {
     return intervalsDAL.findByInterval(interval);
   }
+  if (!currentBlock) return null;
+
   const currentInterval = getCurrentInterval(currentBlock);
   const [current, prev] = await Promise.all([
     intervalsDAL.findByInterval(currentInterval),
