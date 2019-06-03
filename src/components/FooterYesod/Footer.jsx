@@ -1,9 +1,5 @@
 import React from 'react';
-import { observer, inject } from 'mobx-react';
-import { Link } from 'react-router-dom';
-import Config from '../../lib/Config';
 import Logo from '../Logo';
-import ExternalLink from '../ExternalLink';
 import Button from '../buttons/Button';
 import ButtonToolbar from '../buttons/ButtonToolbar';
 import SyncNotification from '../SyncNotification';
