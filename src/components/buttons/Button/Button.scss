@@ -22,6 +22,13 @@
   &.btn-dark-2:hover {
     background-color: #202020;
   }
+  &.btn-lightest {
+    color: $darkest;
+    &:hover {
+      background-color: $darkest;
+      color: $lightest;
+    }
+  }
   &.btn-link {
     &:disabled {
       color: $gray;

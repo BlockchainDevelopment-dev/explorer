@@ -53,6 +53,8 @@ $danger : $red;
 $light : $gray-400;
 $dark : $gray-600;
 $dark-2 : #dbdbdb;
+$lightest: $white;
+$darkest: $black;
 
 $theme-colors: ();
 $theme-colors: map-merge((
@@ -63,8 +65,10 @@ $theme-colors: map-merge((
   "warning":    $warning,
   "danger":     $danger,
   "light":      $light,
+  "lightest":   $lightest,
   "dark":       $dark,
   "dark-2":     $dark-2,
+  "darkest":    $darkest,
 ), $theme-colors);
 
 $body-bg: $black;

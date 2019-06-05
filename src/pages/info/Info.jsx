@@ -118,7 +118,7 @@ class InfoPage extends Component {
               content={walletVersion}
               iconClass="fal fa-wallet fa-fw"
             >
-              <Button href="https://docs.zenprotocol.com/preparation/installers" type="dark-2">
+              <Button href="https://docs.zenprotocol.com/preparation/installers" type="lightest">
                 Download wallet
               </Button>
             </InfoBox>
@@ -128,7 +128,7 @@ class InfoPage extends Component {
               content={nodeVersion}
               iconClass="fal fa-server fa-fw"
             >
-              <Button href="https://docs.zenprotocol.com/headless" type="dark-2">
+              <Button href="https://docs.zenprotocol.com/headless" type="lightest">
                 Download node
               </Button>
             </InfoBox>
