@@ -58,12 +58,7 @@
     padding-left: $grid-gutter-width / 2;
     padding-right: $grid-gutter-width / 2;
   }
-
-  .FooterDownloadButtons {
-    .title {
-      margin-bottom: 12px;
-    }
-  }
+  
   @media (min-width: map-get($grid-breakpoints, "md")) {
     .FooterLinks {
       flex-direction: row;

@@ -41,16 +41,9 @@ function FooterCopyright() {
 function FooterDownloadButtons() {
   return (
     <div className="FooterDownloadButtons">
-      <div className="title">DOWNLOAD YESOD WALLET:</div>
       <ButtonToolbar>
         <Button href="https://docs.zenprotocol.com/preparation/installers" target="_blank" type="lightest" size="sm">
-          <i className="fab fa-windows" /> Windows
-        </Button>
-        <Button href="https://docs.zenprotocol.com/preparation/installers" target="_blank" type="lightest" size="sm">
-          <i className="fab fa-apple"></i> Mac OS
-        </Button>
-        <Button href="https://docs.zenprotocol.com/preparation/installers" target="_blank" type="lightest" size="sm">
-          <i className="fab fa-linux"></i>Linux
+          Download Yesod Wallet
         </Button>
       </ButtonToolbar>
     </div>
