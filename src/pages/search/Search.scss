@@ -1,7 +1,13 @@
+@import 'src/style/variables';
+
 .SearchResults {
   h1 .search-string {
     font-size: 1rem;
     font-weight: normal;
     padding-top: 15px;
+  }
+
+  mark {
+    color: $black;
   }
 }

@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 import ReactHighcharts from 'react-highcharts';
 
 const COLORS = {
-  text: '#f2f2f2',
-  textGray: '#999999',
+  text: '#0d0d0d',
+  textGray: '#666666',
   border: '#333333',
-  bg: '#0e0e0e',
+  bg: '#ededed',
 };
 
 const titleStyle = {

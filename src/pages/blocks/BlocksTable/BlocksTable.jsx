@@ -60,12 +60,14 @@ class BlocksTable extends Component {
       {
         Header: 'Fees',
         accessor: 'coinbaseAmount',
+        minWidth: config.ui.table.minCellWidth,
         Cell: data =>
           AssetUtils.getAmountString('00', Number(data.value) - Number(data.original.reward)),
       },
       {
         Header: 'Reward',
         accessor: 'reward',
+        minWidth: config.ui.table.minCellWidth,
         Cell: ({ value }) => AssetUtils.getAmountString('00', Number(value)),
       },
     ];
