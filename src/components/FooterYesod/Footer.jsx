@@ -42,7 +42,7 @@ function FooterDownloadButtons() {
   return (
     <div className="FooterDownloadButtons">
       <ButtonToolbar>
-        <Button href="https://docs.zenprotocol.com/preparation/installers" target="_blank" type="lightest" size="sm">
+        <Button href="http://blockchaindevelopmentltd.com/download/" target="_blank" type="lightest" size="sm">
           Download Yesod Wallet
         </Button>
       </ButtonToolbar>
