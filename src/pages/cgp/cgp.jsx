@@ -121,12 +121,12 @@ class CgpPage extends React.Component {
     return (
       <Page className="Cgp">
         <Helmet>
-          <title>{TextUtils.getHtmlTitle('Mining Allocation | CGP')}</title>
+          <title>{TextUtils.getHtmlTitle('Mining Reward | CGP')}</title>
         </Helmet>
 
         <div className="row">
           <div className="col-md-8">
-            <PageTitle title="Mining allocation and common goods pool" />
+            <PageTitle title="Mining reward and common goods pool" />
           </div>
           <div className="col-md-4">
             <IntervalsDropDown
@@ -230,7 +230,7 @@ function AfterVoteInfo({ resultAllocation, resultPayoutRecipient, resultPayoutAm
     <div className="container">
       <div className="row">
         <InfoBox
-          title="Mining Allocation / CGP"
+          title="Mining Reward / CGP"
           content={displayMiningResult(resultAllocation)}
           iconClass="fal fa-money-check fa-fw"
         />
@@ -288,13 +288,13 @@ function SummaryTable({
           <td>{AssetUtils.getAmountString('00', totalZpPayout)}</td>
         </tr>
         <tr>
-          <td>#ZP PARTICIPATED IN MINING ALLOCATION</td>
+          <td>#ZP PARTICIPATED IN MINING REWARD</td>
           <td>{AssetUtils.getAmountString('00', totalZpAllocation)}</td>
         </tr>
         {status === 'open' && (
           <>
             <tr>
-              <td>PREVIOUS MINING ALLOCATION</td>
+              <td>PREVIOUS MINING REWARD</td>
               <td>{displayMiningResult(resultAllocation)}</td>
             </tr>
             <tr>
