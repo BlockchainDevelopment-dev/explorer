@@ -47,8 +47,6 @@ Promise.all([
   commandsQueue.clean(0, 'completed'),
   commandsQueue.clean(0, 'failed'),
 ]).then(() => {
-  // schedule ---
-  commandsQueue.add({}, { repeat: { cron: '* * * * *' } });
   // now
   commandsQueue.add({});
 });

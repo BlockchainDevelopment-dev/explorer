@@ -6,10 +6,10 @@
  */
 
 require('./blocksQueue');
-require('./reorgsScanQueue');
 require('./infosQueue');
 require('./contractsQueue');
 require('./commandsQueue');
 require('./viewsRefreshQueue');
 require('./snapshotsQueue');
 require('./votesQueue');
+require('./cgpWinnerQueue');
