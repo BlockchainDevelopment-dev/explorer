@@ -65,8 +65,6 @@ class InfoPage extends Component {
       blocks,
       transactions,
       difficulty,
-      nodeVersion,
-      walletVersion,
       cgpBalance,
       cgpAllocation,
     } = infos;
@@ -141,20 +139,20 @@ class InfoPage extends Component {
             <InfoBox
               className="wallet"
               title="zen wallet"
-              content={walletVersion}
+              content="v1.0.0"
               iconClass="fal fa-wallet fa-fw"
             >
-              <Button href="https://docs.zenprotocol.com/preparation/installers" type="lightest">
+              <Button href="https://yesod.blockchaindevelopmentltd.com/download/" type="lightest">
                 Download wallet
               </Button>
             </InfoBox>
             <InfoBox
               className="node"
               title="Zen node"
-              content={nodeVersion}
+              content="v1.0.0"
               iconClass="fal fa-server fa-fw"
             >
-              <Button href="https://docs.zenprotocol.com/headless" type="lightest">
+              <Button href="https://yesod.blockchaindevelopmentltd.com/download/" type="lightest">
                 Download node
               </Button>
             </InfoBox>
